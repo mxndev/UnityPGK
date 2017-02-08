@@ -7,8 +7,8 @@ public class MachineController : MonoBehaviour {
 	float offset;
 	FirstPersonController player;
 	GUIStyle style;
-	float endTime;
-	bool renderMachine;
+	float endTime, endTimeFalse;
+	bool renderMachine, renderFalse;
 
 	// Use this for initialization
 	void Start () {
@@ -18,6 +18,7 @@ public class MachineController : MonoBehaviour {
 		style.fontSize = 30;
 		style.normal.textColor = Color.white;
 		renderMachine = false;
+		renderFalse = false;
 		endTime = 0;
 		
 	}
@@ -27,7 +28,8 @@ public class MachineController : MonoBehaviour {
 		if (player.numberOfBooks >= 10) {
 			if (CheckPlayerInMachine (player.transform.position, this.transform.position)) {
 				if (Input.inputString == "e" || Input.inputString == "E") {
-					player.transform.position = new Vector3 (35.0f, 0.0f, 214.0f);
+					player.transform.position = new Vector3 (276.0f, 1.0f, 102.5f);
+					player.initializeMoveGame ();
 				}
 			}
 		}
@@ -42,8 +44,19 @@ public class MachineController : MonoBehaviour {
 				renderMachine = false;
 			}
 		}
-	}
 
+		if (player.hitPoints <= 0) {
+			endTimeFalse = Time.time + 5;
+			player.hitPoints = 100;
+		}
+		if (endTimeFalse > Time.time) {
+			renderFalse = true;
+		} else {
+			if (renderFalse) {
+				renderFalse = false;
+			}
+		}
+	}
 
 	bool CheckPlayerInMachine(Vector3 playerPos, Vector3 bookPos)
 	{
@@ -59,6 +72,10 @@ public class MachineController : MonoBehaviour {
 		if (renderMachine)
 		{
 			GUI.Label (new Rect (Screen.width * 0.5f - 200.0f, Screen.height * 0.5f - 10f, 10, 20), "Teraz możesz użyć maszyny.", style);
+		}
+		if (renderFalse)
+		{
+			GUI.Label (new Rect (Screen.width * 0.5f - 200.0f, Screen.height * 0.5f - 10f, 10, 20), "Przegrałeś! Spróbuj jeszcze raz.", style);
 		}
 	}
 }

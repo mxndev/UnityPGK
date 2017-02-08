@@ -42,6 +42,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Jumping;
         private AudioSource m_AudioSource;
 		public int numberOfBooks;
+		public double hitPoints;
+		bool showHP;
+		GUIStyle style;
 
         // Use this for initialization
         private void Start()
@@ -57,6 +60,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
 			numberOfBooks = 0;
+			hitPoints = 100;
+			style = new GUIStyle ();
+			style.fontSize = 30;
+			style.normal.textColor = Color.white;
         }
 
 
@@ -257,5 +264,25 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
             body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
         }
+
+		public void initializeMoveGame()
+		{
+			GameObject.Find ("sciana2").transform.Translate(GameObject.Find ("sciana2").transform.position.x - 285.0f, 0, 0);
+			GameObject.Find ("sciana1").transform.Translate(GameObject.Find ("sciana1").transform.position.x - 273.0f, 0, 0);
+			showHP = true;
+		}
+
+		public void endMoveGame()
+		{
+			showHP = false;
+		}
+
+		void OnGUI()
+		{
+			if (showHP)
+			{
+				GUI.Label (new Rect (Screen.width * 0.5f - 100.0f, Screen.height - 50f, 10, 20), "Ilość życia: " + Convert.ToInt32(hitPoints), style);
+			}
+		}
     }
 }
